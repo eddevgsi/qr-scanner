@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera Scan QR</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Camera Scan QR V2</title>
 
     <style>
     #preview{
@@ -11,43 +12,55 @@
         margin:0px auto;
     }
     </style>
+
 </head>
 <body>
-    <video id="preview"></video>
+    <video id="preview" playsinline></video>
 
     <label class="btn btn-primary active">
-        <input type="radio" name="options" value="1" autocomplete="off" checked> Front Camera
+        <input type="radio" name="options" value="1" autocomplete="off" checked> Camera1
     </label>
     <label class="btn btn-secondary">
-        <input type="radio" name="options" value="2" autocomplete="off"> Back Camera
+        <input type="radio" name="options" value="2" autocomplete="off"> Camera2
     </label>
 
+    <div id="camera1"></div>
+    <div id="camera2"></div>
+	
+	<script src="jquery.min.js"></script>
     <script src="instascan.min.js"></script>
     <script type="text/javascript">
         var scanner = new Instascan.Scanner({ 
             video: document.getElementById('preview'), 
             scanPeriod: 5, 
-            mirror: false 
+            mirror: true 
         });
 
         scanner.addListener('scan',function(content){
-            console.log(content);
-
-            // window.open(content);
-            //window.location.href=content;
+            alert(content);
         });
 
+        let jq = $;
+
         Instascan.Camera.getCameras().then(function (cameras){
+        	console.log($)
+        	console.log(cameras[0].name)
+        	$('#camera1').text(cameras[0].name);
+
+        	if(cameras[1]){
+        		$('#camera2').text(cameras[1].name);
+        	} 
+
             if(cameras.length>0){
                 scanner.start(cameras[0]);
-                $('[name="options"]').on('change',function(){
-                    if($(this).val()==1){
+                jq('[name="options"]').on('change',function(){
+                    if(jq(this).val()==1){
                         if(cameras[0]!=""){
                             scanner.start(cameras[0]);
                         }else{
                             alert('No Front camera found!');
                         }
-                    }else if($(this).val()==2){
+                    }else if(jq(this).val()==2){
                         if(cameras[1]!=""){
                             scanner.start(cameras[1]);
                         }else{
