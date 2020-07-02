@@ -33,6 +33,7 @@
 
     <div id="camera1"></div>
     <div id="camera2"></div>
+    <button id="currentCam"></button>
 	
 	<script src="jquery.min.js"></script>
     <script src="quocthai95/webrtc-adapter-7.6.3.min.js"></script>
@@ -61,16 +62,20 @@
 
             if(cameras.length>0){
                 scanner.start(cameras[0]);
+                $('#currentCam').text(JSON.stringify(cameras[0]));
+                
                 jq('[name="options"]').on('change',function(){
                     if(jq(this).val()==1){
                         if(cameras[0]!=""){
                             scanner.start(cameras[0]);
+                            jq('#currentCam').text(JSON.stringify(cameras[0]));
                         }else{
                             alert('No Front camera found!');
                         }
                     }else if(jq(this).val()==2){
                         if(cameras[1]!=""){
                             scanner.start(cameras[1]);
+                            jq('#currentCam').text(JSON.stringify(cameras[1]));
                         }else{
                             alert('No Back camera found!');
                         }
